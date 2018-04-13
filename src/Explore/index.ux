@@ -1,88 +1,200 @@
 <template>
-  <div class="home-page">
-    <tabs onchange="onChangeTabIndex">
+  <div class="explore-page">
+    <tabs index="{{currentTabIndex}}" onchange="onTabChange">
       <tab-bar class="tab-bar" mode="scrollable">
-        <text for="{{tabHeadList}}"  class="{{currentIndex === $idx ? 'active' : ''}}" >{{$item.title}}</text>
+        <text class="tab-bar-item {{currentTabIndex === $idx ? 'active' : ''}}" for="{{categories}}">{{$item.name}}</text>
       </tab-bar>
       <tab-content class="tab-content">
-        <div class="tab-content-section" for="{{tabHeadList}}">
-          <!-- 初始化时，if为false，默认不做渲染；点击后改为true -->
-          <text if="{{ renderTabContent($idx) }}">{{$item.title}}</text>
+        <div class="tab-content-section" for="{{categories}}">
+          <div class="search">
+            <input type="text" placeholder="搜索..." onchange="onSearchChange">
+          </div>
+          <list class="list" if="{{currentTabIndex === $idx}}" onscrollbottom="loadMore">
+            <list-item class="list-item" type="shop-item" for="{{s in $item.shops}}">
+              <image class="image" src="{{s.images[0]}}"></image>
+              <div class="info">
+                <text class="name">{{s.name}}</text>
+                <text class="phone">电话：{{s.phone || '暂无'}}</text>
+                <text class="address">地址：{{s.address}}</text>
+                <text class="hours">营业时间：{{s.businessHours}}</text>
+              </div>
+            </list-item>
+            <list-item class="load-status" type="load-status">
+              <progress type="circular" show="{{!$item.noMore}}"></progress>
+              <text show="{{!$item.noMore}}">拼命加载中...</text>
+              <text show="{{$item.noMore}}">都到底了！你还扯~ ψ(｀∇´)ψ</text>
+            </list-item>
+          </list>
         </div>
       </tab-content>
     </tabs>
   </div>
 </template>
 
-<style lang="less">
-  .home-page {
+<script>
+  import router from '@system.router'
+  import api from '../Common/api'
+
+  export default {
+    private: {
+      currentTabIndex: 0,
+      isLoading: false,
+      categories: []
+    },
+    protected: {
+      // 接收路由参数！
+      id: undefined
+    },
+    onInit () {
+      const id = ~~this.id
+      api.getCategories().then(data => {
+        this.categories = data
+        const i = data.find(i => i.id === id)
+        this.currentTabIndex = data.indexOf(i)
+      })
+    },
+    onTabChange (e) {
+      this.currentTabIndex = e.index
+      this.loadMore()
+    },
+
+    onSearchChange (e) {
+      if (e.value) {
+        this.categories[this.currentTabIndex].query = e.value
+      } else {
+        delete this.categories[this.currentTabIndex].query
+      }
+      delete this.categories[this.currentTabIndex].shops
+      delete this.categories[this.currentTabIndex].noMore
+      delete this.categories[this.currentTabIndex].currentPage
+
+      this.loadMore()
+    },
+
+    // https://cn.vuejs.org/v2/guide/list.html#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9
+    loadMore () {
+      if (this.isLoading || this.categories[this.currentTabIndex].noMore) return
+
+      this.isLoading = true
+
+      const item = Object.assign({}, this.categories[this.currentTabIndex])
+
+      item.currentPage = item.currentPage || 0
+
+      api.getShops(item.id, ++item.currentPage, item.query).then(data => {
+        console.log(item.name, 'loadMore', 'done', data.length)
+
+        if (!data.length) {
+          item.noMore = true
+        }
+
+        item.shops = (item.shops || []).concat(data)
+        this.categories.splice(this.currentTabIndex, 1, item)
+        this.isLoading = false
+      })
+    }
+
+  }
+</script>
+
+<style>
+  .explore-page {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
 
-    .tab-bar text {
-      padding: 0 25px;
-      text-align: center;
-      font-size: 34px;
-    }
+  .explore-page tabs {
+  }
 
-    .tab-bar .active {
-      color: #ff0000;
-    }
+  .tab-bar {
+    background-color: #15aabf;
+  }
 
-    .tab-content {
-      flex: 1;
-      background-color: #eeeeee;
+  .tab-bar-item {
+    padding: 0 20px;
+    font-size: 30px;
+    line-height: 30px;
+    color: #66d9e8;
+  }
 
-      .tab-content-section {
-        flex: 1;
-        margin: 10px;
-        background-color: #ffffff;
-        justify-content: center;
+  .active {
+    color: #ffffff;
+  }
 
-        text {
-          text-align: center;
-          color: #ff0000;
-        }
-      }
-    }
+  .tab-content {
+  }
+
+  .tab-content-section {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .search {
+    padding: 15px 25px;
+    border-color: #dee2e6;
+    border-bottom-width: 1px;
+  }
+
+  .search input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    font-size: 28px;
+    background-color: #ffffff;
+  }
+
+  .list {
+  }
+
+  .list-item {
+    padding: 25px;
+    /*border-color: #e9ecef;*/
+    border-color: #dee2e6;
+    border-bottom-width: 1px;
+    background-color: #ffffff;
+  }
+
+  .list-item .image {
+    flex-shrink: 0;
+    width: 160px;
+    height: 160px;
+    margin-right: 20px;
+  }
+
+  .list-item .info {
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .list-item .info .name {
+    margin-bottom: 10px;
+    font-size: 32px;
+  }
+
+  .list-item .info .phone {
+    font-size: 24px;
+    color: #868e96;
+  }
+
+  .list-item .info .address {
+    font-size: 24px;
+    color: #868e96;
+  }
+
+  .list-item .info .hours {
+    font-size: 24px;
+    color: #868e96;
+  }
+
+  .load-status {
+    justify-content: center;
+    padding: 50px;
+    padding-bottom: 100px;
+  }
+
+  .load-status text {
+    color: #ced4da;
   }
 </style>
-
-<script>
-  export default {
-    private: {
-      tabHeadList: [
-        { title: '推荐' },
-        { title: '热门' },
-        { title: '视频' },
-        { title: '段子' },
-        { title: '汽车' },
-        { title: '社会' },
-        { title: '娱乐' },
-        { title: '军事' },
-        { title: '体育' },
-        { title: 'NBA' },
-        { title: '财经' }
-      ],
-      currentIndex: 0
-    },
-    onInit () {
-      this.$page.setTitleBar({ text: '页签内容懒加载' })
-      // 加载第一个页签内容
-      this.changeTabIndex(0)
-    },
-    changeTabIndex (index) {
-      const item = Object.assign({}, this.tabHeadList[index])
-      item.render = true
-      this.tabHeadList.splice(index, 1, item)
-    },
-    onChangeTabIndex (evt) {
-      this.currentIndex = evt.index
-      this.changeTabIndex(evt.index)
-    },
-    renderTabContent (index) {
-      return !!this.tabHeadList[index].render
-    }
-  }
-</script>

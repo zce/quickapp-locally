@@ -1,7 +1,39 @@
 import fetch from '@system.fetch'
+import storage from '@system.storage'
+
+const getCache = key => new Promise((resolve, reject) => {
+  storage.get({
+    key: key,
+    success (data) {
+      if (!data) return reject()
+      try {
+        data = JSON.parse(data)
+        if (!data.expires || data.expires < Date.now()) {
+          storage.delete({ key })
+          return reject()
+        }
+        resolve(data.value)
+      } catch (e) {
+        reject()
+      }
+    },
+    fail () {
+      reject()
+    }
+  })
+})
+
+const setCache = (key, value, expires) => new Promise((resolve, reject) => {
+  storage.set({
+    key: key,
+    value: JSON.stringify({ value, expires: Date.now() + expires }),
+    success: resolve,
+    fail: reject
+  })
+})
 
 export default {
-  fetch (url) {
+  fetch (url, params) {
     if (!url.startsWith('http')) {
       url = 'https://locally.uieee.com' + url
     }
@@ -9,6 +41,7 @@ export default {
     return new Promise((resolve, reject) => {
       fetch.fetch({
         url: url,
+        data: params,
         success: res => {
           try {
             resolve(JSON.parse(res.data))
@@ -25,6 +58,23 @@ export default {
   },
 
   getCategories () {
-    return this.fetch('/categories')
+    return getCache('categories')
+      .then(cache => {
+        console.log('resolve categories from cache')
+        return cache
+      })
+      .catch(() => {
+        return this.fetch('/categories').then(data => {
+          console.log('resolve categories from remote')
+          setCache('categories', data, 10 * 60 * 1000)
+          return data
+        })
+      })
+  },
+
+  getShops (cat, page, query) {
+    const params = { _page: page, _limit: 20 }
+    if (query) params.q = query
+    return this.fetch(`/categories/${cat}/shops`, params)
   }
 }

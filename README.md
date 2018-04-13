@@ -171,3 +171,11 @@ $ adb shell pm list package -f
 ## 生成证书文件
 
 openssl req -newkey rsa:2048 -nodes -keyout private.pem -x509 -days 3650 -out certificate.pem
+
+## a 链接组件
+
+打开外部网址 URL 需要声明 system.webview
+
+## 页面跳转导航必须添加 system.router
+
+## 单项数据同步问题

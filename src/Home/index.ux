@@ -10,12 +10,13 @@
       </div>
     </div>
     <div class="copyright">
-      <text>MIT &copy; zce &lt;w@zce.me&gt; (https://github.com/zce/quickapp-locally)</text>
+      <text><a href="https://github.com/zce/quickapp-locally/blob/master/LICENSE">MIT</a> &copy; <a href="https://zce.me">汪磊</a></text>
     </div>
   </div>
 </template>
 
 <script>
+  import prompt from '@system.prompt'
   import router from '@system.router'
   import api from '../Common/api'
 
@@ -30,9 +31,22 @@
     },
     onMenuPress () {
       router.push({ uri: '/Profile' })
+      // prompt.showContextMenu({
+      //   // itemColor: '#ff33ff',
+      //   itemList: [ 'item1', 'item2' ],
+      //   success: function (data) {
+      //     console.log('handling callback')
+      //   },
+      //   cancel: function (data) {
+      //     console.log('handling cancel')
+      //   },
+      //   fail: function (data, code) {
+      //     console.log(`handling fail, code = ${code}`)
+      //   }
+      // })
     },
-    navigateTo (catId) {
-      router.push({ uri: '/Explore', params: { catId: catId } })
+    navigateTo (id) {
+      router.push({ uri: '/Explore', params: { id } })
     }
   }
 </script>
@@ -44,9 +58,9 @@
 
   .swiper {
     height: 380px;
-    indicator-size: 10px;
-    indicator-color: #ced4da;
-    indicator-selected-color: #3a4861;
+    indicator-size: 15px;
+    indicator-color: #e3fafc;
+    indicator-selected-color: #3bc9db;
   }
 
   .swiper-item {
@@ -55,16 +69,14 @@
   }
 
   .grid {
-    display: flex;
     flex-wrap: wrap;
-    border: 1px solid #eeeeee;
+    border: 1px solid #e9ecef;
     border-right-width: 0;
     border-bottom-width: 0;
     background-color: #ffffff;
   }
 
   .grid-item {
-    display: flex;
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 248px;
@@ -72,7 +84,7 @@
     justify-content: center;
     align-items: center;
     height: 250px;
-    border: 1px solid #eeeeee;
+    border: 1px solid #e9ecef;
     border-top-width: 0;
     border-left-width: 0;
   }
@@ -85,17 +97,17 @@
   .grid-item text {
     margin-top: 20px;
     font-size: 28px;
-    color: #999999;
+    color: #868e96;
   }
 
   .copyright {
-    margin-bottom: 20px;
-    padding: 25px;
+    justify-content: center;
+    margin-bottom: 40px;
+    padding: 50px;
   }
 
   .copyright text {
-    font-size: 22px;
-    text-align: center;
-    color: #adb5bd;
+    font-size: 24px;
+    color: #ced4da;
   }
 </style>

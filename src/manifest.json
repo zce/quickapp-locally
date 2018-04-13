@@ -6,59 +6,46 @@
   "minPlatformVersion": "101",
   "icon": "/Common/icon.png",
   "features": [
+    { "name": "system.fetch" },
     { "name": "system.prompt" },
-    { "name": "system.fetch" }
+    { "name": "system.storage" },
+    { "name": "system.webview" }
   ],
   "permissions": [
     { "origin": "*" }
   ],
   "config": {
-    "logLevel": "debug",
     "designWidth": "750",
     "data": {
       "author": "zce <w@zce.me>"
-    }
+    },
+    "logLevel": "debug"
   },
   "router": {
     "entry": "Home",
     "pages": {
-      "Home": {
-        "component": "index",
-        "path": "/Home",
-        "filter": {
-          "view": {
-            "uri": "https?://.*"
-          }
-        }
-      },
-      "Explore": {
-        "component": "index"
-      },
-      "Detail": {
-        "component": "index"
-      },
-      "Message": {
-        "component": "index"
-      },
-      "Profile": {
-        "component": "index"
-      },
-      "About": {
-        "component": "index"
-      }
+      "Home": { "component": "index" },
+      "Explore": { "component": "index" },
+      "Detail": { "component": "index" },
+      "Message": { "component": "index" },
+      "Profile": { "component": "index" },
+      "About": { "component": "index" }
     }
   },
   "display": {
     "titleBar": true,
     "titleBarText": "本地生活",
-    "titleBarTextColor": "#343a40",
-    "titleBarBackgroundColor": "#ced4da",
+    "titleBarTextColor": "#ffffff",
+    "titleBarBackgroundColor": "#15aabf",
     "backgroundColor": "#f1f3f5",
     "fullScreen": false,
     "menu": true,
     "pages": {
       "Home": {
         "menu": true
+      },
+      "Explore": {
+        "titleBar": false
       },
       "About": {
         "titleBar": false,

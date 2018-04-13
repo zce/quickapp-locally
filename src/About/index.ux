@@ -36,6 +36,33 @@
   </div>
 </template>
 
+<script>
+  /**
+   * 默认的菜单页(可自定义)
+   * name默认为manifest文件中的name字段
+   * icon默认为manifest文件中的icon字段
+   * 若需修改页面中文本，请修改VM data中对应变量
+   * 注意：使用加载器测试`创建桌面快捷方式`功能时，需要进入系统设置->权限管理->开启应用加载器的`桌面快捷方式`权限，才能保存到桌面。应用上线后可自动获取`桌面快捷方式`权限
+   */
+  export default {
+    props: ['name', 'icon'],
+    data: {
+      desc: '即点即用，让你省去下载安装的步骤，立即使用各类服务',
+      serviceType: '工具类',
+      subjectInfo: 'WEDN.NET',
+      copyright: 'Copyright © WEDN.NET'
+    },
+    onInit () {
+      // 设置标题栏
+      this.$page.setTitleBar({ text: this.name })
+    },
+    createShortcut () {
+      // 创建快捷方式
+      this.$app.createShortcut()
+    }
+  }
+</script>
+
 <style>
   .demo-page {
     flex-direction: column;
@@ -132,30 +159,3 @@
     text-align: center;
   }
 </style>
-
-<script>
-  /**
-   * 默认的菜单页(可自定义)
-   * name默认为manifest文件中的name字段
-   * icon默认为manifest文件中的icon字段
-   * 若需修改页面中文本，请修改VM data中对应变量
-   * 注意：使用加载器测试`创建桌面快捷方式`功能时，需要进入系统设置->权限管理->开启应用加载器的`桌面快捷方式`权限，才能保存到桌面。应用上线后可自动获取`桌面快捷方式`权限
-   */
-  export default {
-    props: ['name', 'icon'],
-    data: {
-      desc: '即点即用，让你省去下载安装的步骤，立即使用各类服务',
-      serviceType: '工具类',
-      subjectInfo: 'WEDN.NET',
-      copyright: 'Copyright © WEDN.NET'
-    },
-    onInit () {
-      // 设置标题栏
-      this.$page.setTitleBar({ text: this.name })
-    },
-    createShortcut () {
-      // 创建快捷方式
-      this.$app.createShortcut()
-    }
-  }
-</script>
