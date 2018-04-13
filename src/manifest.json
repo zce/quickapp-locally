@@ -1,0 +1,74 @@
+{
+  "name": "本地生活",
+  "package": "me.zce.locally",
+  "versionName": "1.0.0",
+  "versionCode": "1",
+  "minPlatformVersion": "101",
+  "icon": "/Common/icon.png",
+  "features": [
+    { "name": "system.prompt" },
+    { "name": "system.fetch" }
+  ],
+  "permissions": [
+    { "origin": "*" }
+  ],
+  "config": {
+    "logLevel": "debug",
+    "designWidth": "750",
+    "data": {
+      "author": "zce <w@zce.me>"
+    }
+  },
+  "router": {
+    "entry": "Home",
+    "pages": {
+      "Home": {
+        "component": "index",
+        "path": "/Home",
+        "filter": {
+          "view": {
+            "uri": "https?://.*"
+          }
+        }
+      },
+      "Explore": {
+        "component": "index"
+      },
+      "Detail": {
+        "component": "index"
+      },
+      "Message": {
+        "component": "index"
+      },
+      "Profile": {
+        "component": "index"
+      },
+      "About": {
+        "component": "index"
+      }
+    }
+  },
+  "display": {
+    "titleBar": true,
+    "titleBarText": "本地生活",
+    "titleBarTextColor": "#343a40",
+    "titleBarBackgroundColor": "#ced4da",
+    "backgroundColor": "#f1f3f5",
+    "fullScreen": false,
+    "menu": true,
+    "pages": {
+      "Home": {
+        "menu": true
+      },
+      "About": {
+        "titleBar": false,
+        "titleBarText": "分类 « 本地生活",
+        "titleBarTextColor": "#ffffff",
+        "titleBarBackgroundColor": "#3a4861",
+        "backgroundColor": "#ffffff",
+        "fullScreen": false,
+        "menu": false
+      }
+    }
+  }
+}
