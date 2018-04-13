@@ -1,4 +1,15 @@
+# quickapp-locally
 
+> 《本地生活》快应用示例，for you ❤️
+
+## Preview
+
+![](screenshot-home.png)
+![](screenshot-explore.png)
+
+
+<!--
+踩坑的放一边
 
 toasl 通知 模拟器不可以
 
@@ -179,3 +190,4 @@ openssl req -newkey rsa:2048 -nodes -keyout private.pem -x509 -days 3650 -out ce
 ## 页面跳转导航必须添加 system.router
 
 ## 单项数据同步问题
+ -->
