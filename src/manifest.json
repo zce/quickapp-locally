@@ -49,7 +49,7 @@
     "titleBarBackgroundColor": "#15aabf",
     "backgroundColor": "#f1f3f5",
     "fullScreen": false,
-    "menu": true,
+    "menu": false,
     "pages": {
       "Home": {
         "menu": true

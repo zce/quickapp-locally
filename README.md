@@ -26,6 +26,8 @@ https://doc.quickapp.cn/framework/manifest.html#routerpage
 只有几个国产“山寨”厂商支持
 
 
+错误信息不友好
+
 
 无端端提示创建桌面图标
 魅族调试问题

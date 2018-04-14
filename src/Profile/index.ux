@@ -1,17 +1,17 @@
 <template>
   <div class="profile-page">
     <div class="avatar">
-      <image src="/Common/avatar.png"></image>
+      <image src="/Common/empty.png">
     </div>
 
     <div class="cells">
       <a class="item">个人资料</a>
       <a class="item">我的优惠券</a>
       <div class="divider"></div>
-      <a class="item">常见问题</a>
+      <a class="item" href="sms:13288889999?body=常见问题">常见问题</a>
       <a class="item">使用条款</a>
       <a class="item">隐私权政策</a>
-      <a class="item">联系客服</a>
+      <a class="item" href="tel:13288889999">联系客服</a>
       <div class="divider"></div>
       <a class="item" href="/Setting">设置</a>
     </div>

@@ -1,0 +1,21 @@
+<template>
+  <div>
+    <text>{{text}}</text>
+    <switch checked="{{value}}" disabled="{{readonly}}"/>
+  </div>
+</template>
+
+<script>
+  export default {
+    props: {
+      text: String,
+      checked: Boolean,
+      disabled: Boolean
+    },
+    onInit () {
+      console.log(this.text)
+      console.log(this.checked)
+      console.log(this.disabled)
+    }
+  }
+</script>
