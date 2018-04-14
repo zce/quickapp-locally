@@ -10,7 +10,8 @@
     { "name": "system.prompt" },
     { "name": "system.shortcut" },
     { "name": "system.storage" },
-    { "name": "system.webview" }
+    { "name": "system.webview" },
+    { "name": "system.share" }
   ],
   "permissions": [
     { "origin": "*" }
@@ -58,26 +59,18 @@
         "titleBar": false
       },
       "Detail": {
-        "titleBar": false,
-        "titleBarText": "个人中心",
-        "titleBarTextColor": "#ffffff",
-        "titleBarBackgroundColor": "#3a4861",
-        "backgroundColor": "#ffffff",
-        "fullScreen": false,
-        "menu": false
+        "titleBarText": "店铺详情",
+        "menu": true
       },
       "Profile": {
-        "titleBarText": "个人中心",
-        "menu": false
+        "titleBarText": "个人中心"
       },
       "Setting": {
-        "titleBarText": "设置",
-        "menu": false
+        "titleBarText": "设置"
       },
       "About": {
         "titleBarText": "关于",
-        "backgroundColor": "#ffffff",
-        "menu": false
+        "backgroundColor": "#ffffff"
       }
     }
   }

@@ -1,10 +1,37 @@
 <template>
   <div class="detail-page">
-    <text class="title">{{text}}</text>
+    <swiper class="swiper" indicator="true">
+      <image class="swiper-item" for="{{shop.images}}" src="{{$item}}">
+    </swiper>
+
+    <div class="heading" if="{{shop.name}}">
+      <text class="name">{{shop.name}}</text>
+      <text class="phone">电话：{{shop.phone || '暂无'}}</text>
+      <text class="address">地址：{{shop.address}}</text>
+      <text class="hours">营业时间：{{shop.businessHours}}</text>
+    </div>
+
+    <div class="introduction" if="{{shop.introduction}}">
+      <text>{{shop.introduction}}</text>
+    </div>
+
+    <div class="comments" if="{{shop.comments && shop.comments.length}}">
+      <div class="item" for="{{shop.comments}}">
+        <text class="name">{{$item.name}}</text>
+        <text class="date">{{$item.date}}</text>
+        <text class="rating">满意度：{{$item.rating}}</text>
+        <text class="content">{{$item.content}}</text>
+        <div class="images">
+          <image for="{{img in $item.images}}" src="{{imgSize(img)}}"/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import share from '@system.share'
+
   export default {
     private: {
       shop: {}
@@ -15,18 +42,21 @@
 
     onInit () {
       const id = ~~this.id
-      // setTimeout(() => {
-      //   this.$page.setTitleBar({ text: Date.now() })
-      // }, 2000)
       this.$app.fetchShop(id).then(data => {
-        console.log(data.name)
         this.$page.setTitleBar({ text: data.name })
         this.shop = data
       })
     },
 
     onMenuPress() {
-      // 分享
+      share.share({
+        type: 'text/plain',
+        data: `我在《本地生活》上看到一家“${this.shop.name}”，感觉真棒，分享给你`
+      })
+    },
+
+    imgSize (img) {
+      return img.replace('w.h', '100.100')
     }
   }
 </script>
@@ -34,12 +64,75 @@
 <style>
   .detail-page {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
   }
 
-  .title {
+  .swiper {
+    height: 580px;
+    indicator-size: 10px;
+    indicator-color: #e3fafc;
+    indicator-selected-color: #3bc9db;
+  }
+
+  .swiper-item {
+    width: 100%;
+    height: 100%;
+  }
+
+  .heading {
+    flex-direction: column;
+    padding: 20px 30px;
+    background-color: #ffffff;
+  }
+
+  .heading text {
+    font-size: 24px;
+    color: #868e96;
+  }
+
+  .heading .name {
     font-size: 40px;
-    text-align: center;
+    color: #495057;
+  }
+
+  .introduction {
+    margin-top: 20px;
+    padding: 30px;
+    background-color: #ffffff;
+    color: #495057;
+    font-size: 24px;
+    line-height: 50px;
+  }
+
+  .comments {
+    flex-direction: column;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+  }
+
+  .comments .item {
+    flex-direction: column;
+    padding: 20px;
+    border-bottom-width: 1px;
+    border-bottom-color: #f1f3f5;
+  }
+
+  .comments .item .name {
+    margin-top: 20px;
+    font-size: 36px;
+  }
+
+  .comments .item .date {
+    color: #868e96;
+  }
+
+  .comments .item .rating {
+    color: #fa5252;
+  }
+
+  .comments .item image {
+    width: 110px;
+    height: 110px;
+    margin: 10px;
   }
 </style>
