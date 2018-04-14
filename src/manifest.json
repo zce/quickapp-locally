@@ -17,7 +17,15 @@
   "config": {
     "designWidth": "750",
     "data": {
-      "author": "zce <w@zce.me>"
+      "description": "在北京生活，吃喝玩乐去哪儿~",
+      "author": {
+        "text": "zce <w@zce.me> (https://zce.me)",
+        "link": "https://zce.me"
+      },
+      "license": {
+        "text": "MIT",
+        "link": "https://github.com/zce/quickapp-locally/blob/master/LICENSE"
+      }
     },
     "logLevel": "debug"
   },
@@ -47,13 +55,18 @@
       "Explore": {
         "titleBar": false
       },
-      "About": {
+      "Profile": {
         "titleBar": false,
-        "titleBarText": "分类 « 本地生活",
+        "titleBarText": "个人中心",
         "titleBarTextColor": "#ffffff",
         "titleBarBackgroundColor": "#3a4861",
         "backgroundColor": "#ffffff",
         "fullScreen": false,
+        "menu": false
+      },
+      "About": {
+        "titleBarText": "关于",
+        "backgroundColor": "#ffffff",
         "menu": false
       }
     }

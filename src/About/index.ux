@@ -1,13 +1,9 @@
 <template>
-  <div class="demo-page">
-    <!-- 应用图标 -->
-    <image id="icon" src="{{icon}}"></image>
+  <div class="about-page">
+    <image class="icon" src="{{icon}}">
+    <text class="name">{{name}}</text>
 
-    <!-- 应用名 -->
-    <text id="name">{{name}}</text>
-
-    <!-- 应用标签 -->
-    <div id="tags">
+    <div class="tags">
       <text class="tag">无安装</text>
       <text class="gap">|</text>
       <text class="tag">体积小</text>
@@ -15,147 +11,167 @@
       <text class="tag">一步直达</text>
     </div>
 
-    <!-- 应用描述 -->
-    <text id="desc">{{desc}}</text>
+    <text class="description">{{description}}</text>
 
-    <!-- 应用详情 -->
-    <div class="detail detail-first">
-      <text class="detail-title">服务类型</text>
-      <text class="detail-content">{{serviceType}}</text>
-    </div>
     <div class="detail">
-      <text class="detail-title">主体信息</text>
-      <text class="detail-content">{{subjectInfo}}</text>
+      <div class="item">
+        <text class="title">服务类型</text>
+        <text class="content">生活类</text>
+      </div>
+      <div class="item">
+        <text class="title">主体信息</text>
+        <text class="content">WEDN.NET</text>
+      </div>
+      <div class="item">
+        <text class="title">源码</text>
+        <text class="content"><a href="https://github.com/zce/quickapp-locally">https://github.com/zce/quickapp-locally</a></text>
+      </div>
     </div>
 
-    <!-- 创建快捷方式 -->
-    <input class="btn" type="button" onclick="createShortcut" value="创建快捷方式">
+    <input class="btn" type="button" value="创建快捷方式" onclick="createShortcut">
 
-    <!-- 版权信息 -->
-    <text id="footer">{{copyright}}</text>
+    <text class="copyright">Copyright © WEDN.NET</text>
+    <text class="tips">即点即用，让你省去下载安装的步骤，立即使用各类服务</text>
   </div>
 </template>
 
 <script>
-  /**
-   * 默认的菜单页(可自定义)
-   * name默认为manifest文件中的name字段
-   * icon默认为manifest文件中的icon字段
-   * 若需修改页面中文本，请修改VM data中对应变量
-   * 注意：使用加载器测试`创建桌面快捷方式`功能时，需要进入系统设置->权限管理->开启应用加载器的`桌面快捷方式`权限，才能保存到桌面。应用上线后可自动获取`桌面快捷方式`权限
-   */
+  import app from '@system.app'
+  import prompt from '@system.prompt'
+  import shortcut from '@system.shortcut'
+
   export default {
-    props: ['name', 'icon'],
-    data: {
-      desc: '即点即用，让你省去下载安装的步骤，立即使用各类服务',
-      serviceType: '工具类',
-      subjectInfo: 'WEDN.NET',
-      copyright: 'Copyright © WEDN.NET'
+    private: {
+      name: '',
+      icon: '',
+      description: ''
     },
+
     onInit () {
-      // 设置标题栏
-      this.$page.setTitleBar({ text: this.name })
+      const appInfo = app.getInfo()
+      this.icon = appInfo.icon
+      this.name = appInfo.name
+      this.description = this.$app.$data.description
     },
+
     createShortcut () {
-      // 创建快捷方式
-      this.$app.createShortcut()
+      shortcut.hasInstalled({
+        success (installed) {
+          if (installed) {
+            return prompt.showToast({ message: '已创建桌面图标' })
+          }
+
+          shortcut.install({
+            success () {
+              prompt.showToast({ message: '成功创建桌面图标' })
+            },
+            fail (msg, e) {
+              prompt.showToast({ message: 'error: ' + e + '---' + msg })
+            }
+          })
+        }
+      })
     }
   }
 </script>
 
 <style>
-  .demo-page {
+  .about-page {
     flex-direction: column;
     align-items: center;
   }
 
-  /* 应用图标 */
-  #icon {
+  .icon {
     margin-top: 90px;
-    width: 134px;
-    height: 134px;
-    border-radius: 10px;
-    border: 1px solid #8d8d8d;
+    width: 150px;
+    height: 150px;
+    border-radius: 15px;
+    border: 1px solid #ced4da;
   }
 
-  /* 应用名 */
-  #name {
-    margin-top: 20px;
-    font-size: 36px;
-    color: #000000;
+  .name {
+    margin-top: 30px;
+    font-size: 46px;
+    color: #495057;
   }
 
-  /* 应用标签 */
-  #tags {
-    margin-top: 22px;
+  .tags {
+    margin-top: 30px;
     align-items: center;
   }
 
   .tag {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 0 15px;
     font-size: 28px;
-    color: #2a9700;
+    color: #40c057;
   }
 
   .gap {
-    font-size: 22px;
-    color: #b2b2b2;
+    font-size: 20px;
+    color: #ced4da;
   }
 
-  /* 应用描述 */
-  #desc {
-    width: 650px;
+  .description {
+    width: 620px;
     margin-top: 40px;
     line-height: 35px;
     font-size: 25px;
-    color: #8d8d8d;
+    text-align: center;
+    color: #868e96;
   }
 
-  /* 应用详情 */
   .detail {
-    width: 650px;
+    flex-direction: column;
+    width: 630px;
+    margin-top: 50px;
+    border-top-width: 1px;
+    border-top-color: #f1f3f5;
+  }
+
+  .detail .item {
     height: 90px;
     border-bottom-width: 1px;
-    border-bottom-color: #f0f0f0;
+    border-bottom-color: #f1f3f5;
   }
 
-  .detail-first {
-    margin-top: 65px;
-    border-top-width: 1px;
-    border-top-color: #f0f0f0;
-  }
-
-  .detail-title {
+  .detail .title {
     width: 160px;
     padding-left: 10px;
     font-size: 25px;
-    color: #000000;
+    color: #343a40;
   }
 
-  .detail-content {
+  .detail .content {
     font-size: 25px;
-    color: #8d8d8d;
+    color: #868e96;
   }
 
-  /* 按钮 */
   .btn {
-    width: 550px;
-    height: 86px;
-    margin-top: 75px;
-    border-radius: 43px;
-    background-color: #09ba07;
+    width: 500px;
+    height: 80px;
+    margin-top: 100px;
+    border-radius: 100px;
+    background-color: #15aabf;
     font-size: 30px;
     color: #ffffff;
   }
 
-  /* 底部版权信息 */
-  #footer {
+  .copyright {
     width: 750px;
     position: fixed;
-    bottom: 55px;
+    bottom: 70px;
     font-size: 25px;
-    color: #8d8d8d;
     text-align: center;
+    color: #dee2e6;
+  }
+
+  .tips {
+    width: 750px;
+    position: fixed;
+    bottom: 15px;
+    line-height: 35px;
+    font-size: 25px;
+    text-align: center;
+    color: #e9ecef;
   }
 </style>

@@ -10,7 +10,7 @@
             <input type="text" placeholder="搜索..." onchange="onSearchChange">
           </div>
           <list class="list" if="{{currentTabIndex === $idx}}" onscrollbottom="loadMore">
-            <list-item class="list-item" type="shop-item" for="{{s in $item.shops}}">
+            <list-item class="list-item" type="shop-item" for="{{s in $item.shops}}" onclick="onNavigateTo(s.id)">
               <image class="image" src="{{s.images[0]}}"></image>
               <div class="info">
                 <text class="name">{{s.name}}</text>
@@ -33,7 +33,6 @@
 
 <script>
   import router from '@system.router'
-  import api from '../Common/api'
 
   export default {
     private: {
@@ -42,15 +41,16 @@
       categories: []
     },
     protected: {
-      // 接收路由参数！
+      // required by router params
       id: undefined
     },
     onInit () {
       const id = ~~this.id
-      api.getCategories().then(data => {
+      this.$app.fetchCategories().then(data => {
         this.categories = data
         const i = data.find(i => i.id === id)
         this.currentTabIndex = data.indexOf(i)
+        // tab-bar-item in center?
       })
     },
     onTabChange (e) {
@@ -71,6 +71,10 @@
       this.loadMore()
     },
 
+    onNavigateTo (id) {
+      router.push({ uri: '/Detail', params: { id } })
+    },
+
     // https://cn.vuejs.org/v2/guide/list.html#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9
     loadMore () {
       if (this.isLoading || this.categories[this.currentTabIndex].noMore) return
@@ -81,7 +85,7 @@
 
       item.currentPage = item.currentPage || 0
 
-      api.getShops(item.id, ++item.currentPage, item.query).then(data => {
+      this.$app.fetchShops(item.id, ++item.currentPage, item.query).then(data => {
         console.log(item.name, 'loadMore', 'done', data.length)
 
         if (!data.length) {

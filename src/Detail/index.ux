@@ -1,12 +1,38 @@
 <template>
-  <!-- template里只能有一个根节点 -->
-  <div class="demo-page">
+  <div class="detail-page">
     <text class="title">{{text}}</text>
   </div>
 </template>
 
+<script>
+  export default {
+    private: {
+      shop: {}
+    },
+    protected: {
+      id: undefined
+    },
+
+    onInit () {
+      const id = ~~this.id
+      // setTimeout(() => {
+      //   this.$page.setTitleBar({ text: Date.now() })
+      // }, 2000)
+      this.$app.fetchShop(id).then(data => {
+        console.log(data.name)
+        this.$page.setTitleBar({ text: data.name })
+        this.shop = data
+      })
+    },
+
+    onMenuPress() {
+      // 分享
+    }
+  }
+</script>
+
 <style>
-  .demo-page {
+  .detail-page {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -17,22 +43,3 @@
     text-align: center;
   }
 </style>
-
-<script>
-  export default {
-    private: {
-      text: '欢迎打开详情页'
-    },
-    onInit () {
-      console.log(JSON.stringify(arguments))
-      console.log(JSON.stringify(this.$page))
-    },
-    /**
-     * 当用户点击菜单按钮时触发，调用app中定义的方法showMenu
-     * 注意：使用加载器测试`创建桌面快捷方式`功能时，请先在`系统设置`中打开`应用加载器`的`桌面快捷方式`权限
-     */
-    onMenuPress() {
-      this.$app.showMenu()
-    }
-  }
-</script>

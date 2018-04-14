@@ -4,48 +4,50 @@
       <image class="swiper-item" for="{{slides}}" src="{{$item.image}}">
     </swiper>
     <div class="grid">
-      <div class="grid-item" for="{{categories}}" onclick="navigateTo($item.id)">
+      <div class="grid-item" for="{{categories}}" onclick="onNavigateTo($item.id)">
         <image src="{{$item.icon}}">
         <text>{{$item.name}}</text>
       </div>
     </div>
     <div class="copyright">
-      <text><a href="https://github.com/zce/quickapp-locally/blob/master/LICENSE">MIT</a> &copy; <a href="https://zce.me">汪磊</a></text>
+      <text class="name">{{name}}</text>
+      <text class="license"><a href="{{license.link}}">{{license.text}}</a> &copy; <a href="{{author.link}}">{{author.text}}</a></text>
     </div>
   </div>
 </template>
 
 <script>
+  import app from '@system.app'
   import prompt from '@system.prompt'
   import router from '@system.router'
-  import api from '../Common/api'
 
   export default {
     private: {
+      name: '',
+      author: {},
+      license: {},
       slides: [],
       categories: []
     },
     onInit () {
-      api.getSlides().then(data => { this.slides = data })
-      api.getCategories().then(data => { this.categories = data })
+      this.name = app.getInfo().name
+      // this.$app.$data 获取 manifest.json 中 config.data
+      this.author = this.$app.$data.author
+      this.license = this.$app.$data.license
+
+      this.$app.fetchSlides().then(data => { this.slides = data })
+      this.$app.fetchCategories().then(data => { this.categories = data })
     },
     onMenuPress () {
-      router.push({ uri: '/Profile' })
-      // prompt.showContextMenu({
-      //   // itemColor: '#ff33ff',
-      //   itemList: [ 'item1', 'item2' ],
-      //   success: function (data) {
-      //     console.log('handling callback')
-      //   },
-      //   cancel: function (data) {
-      //     console.log('handling cancel')
-      //   },
-      //   fail: function (data, code) {
-      //     console.log(`handling fail, code = ${code}`)
-      //   }
-      // })
+      prompt.showContextMenu({
+        itemList: [ '个人中心', '消息', '关于' ],
+        success (e) {
+          const uri = [ '/Profile', '/Message', '/About' ][e.index]
+          uri && router.push({ uri })
+        }
+      })
     },
-    navigateTo (id) {
+    onNavigateTo (id) {
       router.push({ uri: '/Explore', params: { id } })
     }
   }
@@ -101,13 +103,20 @@
   }
 
   .copyright {
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 40px;
     padding: 50px;
   }
 
-  .copyright text {
+  .copyright .name {
+    margin-bottom: 20px;
+    font-size: 80px;
+    color: #e9ecef;
+  }
+
+  .copyright .license {
     font-size: 24px;
-    color: #ced4da;
+    color: #dee2e6;
   }
 </style>
