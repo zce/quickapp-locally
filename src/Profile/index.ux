@@ -1,42 +1,62 @@
 <template>
-  <div class="explore-page">
-    <text class="title">欢迎打开{{title}}</text>
-    <input class="btn" type="button" value="跳转到首页" onclick="btnClick">
+  <div class="profile-page">
+    <div class="avatar">
+      <image src="/Common/avatar.png"></image>
+    </div>
+
+    <div class="cells">
+      <a class="item">个人资料</a>
+      <a class="item">我的优惠券</a>
+      <div class="divider"></div>
+      <a class="item">常见问题</a>
+      <a class="item">使用条款</a>
+      <a class="item">隐私权政策</a>
+      <a class="item">联系客服</a>
+      <div class="divider"></div>
+      <a class="item" href="/Setting">设置</a>
+    </div>
+
   </div>
 </template>
 
+<script>
+  export default {}
+</script>
+
+
 <style>
-  .explore-page {
+  .profile-page {
     flex-direction: column;
+  }
+
+  .avatar {
+    display: flex;
     justify-content: center;
     align-items: center;
+    height: 400px;
+    background-color: #15aabf;
   }
 
-  .title {
-    font-size: 40px;
-    text-align: center;
+  .avatar image {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
   }
 
-  .btn {
-    width: 550px;
-    height: 86px;
-    margin-top: 75px;
-    border-radius: 43px;
-    background-color: #09ba07;
+  .cells {
+    flex-direction: column;
+    margin-top: 20px;
+  }
+
+  .cells .item {
+    padding: 20px 30px;
+    border-bottom-width: 1px;
+    border-bottom-color: #f1f3f5;
+    background-color: #ffffff;
     font-size: 30px;
-    color: #ffffff;
+  }
+
+  .cells .divider {
+    height: 20px;
   }
 </style>
-
-<script>
-  import router from '@system.router'
-
-  export default {
-    data: {
-      title: 'Explore'
-    },
-    btnClick () {
-      router.push({ uri: '/Home' })
-    }
-  }
-</script>

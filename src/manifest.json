@@ -8,6 +8,7 @@
   "features": [
     { "name": "system.fetch" },
     { "name": "system.prompt" },
+    { "name": "system.shortcut" },
     { "name": "system.storage" },
     { "name": "system.webview" }
   ],
@@ -37,6 +38,7 @@
       "Detail": { "component": "index" },
       "Message": { "component": "index" },
       "Profile": { "component": "index" },
+      "Setting": { "component": "index" },
       "About": { "component": "index" }
     }
   },
@@ -55,13 +57,21 @@
       "Explore": {
         "titleBar": false
       },
-      "Profile": {
+      "Detail": {
         "titleBar": false,
         "titleBarText": "个人中心",
         "titleBarTextColor": "#ffffff",
         "titleBarBackgroundColor": "#3a4861",
         "backgroundColor": "#ffffff",
         "fullScreen": false,
+        "menu": false
+      },
+      "Profile": {
+        "titleBarText": "个人中心",
+        "menu": false
+      },
+      "Setting": {
+        "titleBarText": "设置",
         "menu": false
       },
       "About": {
