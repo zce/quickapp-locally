@@ -44,7 +44,7 @@
     "html-webpack-plugin": "^2.28.0",
     "hybrid-chai": "~0.0.1",
     "hybrid-mocha": "~0.0.1",
-    "jsrsasign": "^7.1.2",
+    "jsrsasign": "^8.0.23",
     "koa": "^2.3.0",
     "koa-body": "^2.5.0",
     "koa-router": "^7.2.1",
